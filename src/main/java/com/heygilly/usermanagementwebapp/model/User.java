@@ -1,26 +1,13 @@
 package com.heygilly.usermanagementwebapp.model;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "users")
 public class User {
 
-    @Id
-    @Column(name = "User_ID", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "First Name",nullable = false, length = 45)
     private String first_name;
-    @Column(name = "Last Name", nullable = false, length = 45)
     private String last_name;
-    @Column(name = "Email", nullable = false, length = 50)
     private String email;
-    @Column(name = "Username", nullable = false, length = 25, unique = true)
     private String username;
-    @Column(name = "City", nullable = false, length = 50)
     private String city;
-    @Column(name = "State", nullable = false, length = 24)
     private String state;
 
     //--- Constructors
