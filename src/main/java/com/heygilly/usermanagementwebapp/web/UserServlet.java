@@ -52,7 +52,7 @@ public class UserServlet extends HttpServlet {
                     listUser(request, response);
                     break;
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             throw new ServletException(ex);
         }
     }
@@ -86,12 +86,12 @@ public class UserServlet extends HttpServlet {
     // insert user
     private void insertUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        String first_name = request.getParameter("First Name");
-        String last_name = request.getParameter("Last Name");
-        String email = request.getParameter("Email");
-        String username = request.getParameter("Username");
-        String city = request.getParameter("City");
-        String state = request.getParameter("State");
+        String first_name = request.getParameter("first_name");
+        String last_name = request.getParameter("last_name");
+        String email = request.getParameter("email");
+        String username = request.getParameter("username");
+        String city = request.getParameter("city");
+        String state = request.getParameter("state");
 
         User newUser = new User(first_name, last_name, email, username, city, state);
         userDAO.insertUser(newUser);
@@ -102,12 +102,12 @@ public class UserServlet extends HttpServlet {
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        String first_name = request.getParameter("First Name");
-        String last_name = request.getParameter("Last Name");
-        String email = request.getParameter("Email");
-        String username = request.getParameter("Username");
-        String city = request.getParameter("City");
-        String state = request.getParameter("State");
+        String first_name = request.getParameter("first_name");
+        String last_name = request.getParameter("last_name");
+        String email = request.getParameter("email");
+        String username = request.getParameter("username");
+        String city = request.getParameter("city");
+        String state = request.getParameter("state");
 
         User updatePlayer = new User(id, first_name, last_name, email, username, city, state);
         userDAO.updateUser(updatePlayer);
@@ -116,7 +116,7 @@ public class UserServlet extends HttpServlet {
 
     //delete user
     private void deleteUser(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException {
+            throws SQLException, IOException, ClassNotFoundException {
         int id = Integer.parseInt(request.getParameter("id"));
         userDAO.deleteUser(id);
         response.sendRedirect("list");
