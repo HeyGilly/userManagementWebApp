@@ -10,13 +10,16 @@ public class UserDAO {
 
     public UserDAO() {}
 
-    protected Connection getConnection() throws SQLException {
+    private Connection getConnection() throws SQLException, ClassNotFoundException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
         Config config = new Config();
-        return DriverManager.getConnection(
+        Connection connection = DriverManager.getConnection(
                 config.getUrl(),
                 config.getUser(),
                 config.getPassword()
         );
+        return connection;
     }
 
 
@@ -46,6 +49,7 @@ public class UserDAO {
         }
     }
 
+
     //-- Update user
     public boolean updateUser(User user) throws SQLException{
         boolean rowUpdated;
@@ -59,6 +63,8 @@ public class UserDAO {
             statement.setInt(7, user.getId());
 
             rowUpdated = statement.executeUpdate() > 0;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return rowUpdated;
     }
@@ -74,15 +80,15 @@ public class UserDAO {
             ResultSet rs = statement.executeQuery();
             // Step 3: Process the Result Set Object
             while(rs.next()){
-                String first_name = rs.getString("First Name");
-                String last_name = rs.getString("Last Name");
-                String email = rs.getString("Email");
-                String username = rs.getString("Username");
-                String city = rs.getString("City");
-                String state = rs.getString("State");
+                String first_name = rs.getString("first_name");
+                String last_name = rs.getString("last_name");
+                String email = rs.getString("email");
+                String username = rs.getString("username");
+                String city = rs.getString("city");
+                String state = rs.getString("state");
                 user = new User(id, first_name, last_name, email, username, city, state);
             }
-        }catch (SQLException e){
+        }catch (SQLException | ClassNotFoundException e){
             e.printStackTrace();
         }
         return user;
@@ -97,23 +103,23 @@ public class UserDAO {
             ResultSet rs = statement.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("id");
-                String first_name = rs.getString("First Name");
-                String last_name = rs.getString("Last Name");
-                String email = rs.getString("Email");
-                String username = rs.getString("Username");
-                String city = rs.getString("City");
-                String state = rs.getString("State");
+                String first_name = rs.getString("first_name");
+                String last_name = rs.getString("last_name");
+                String email = rs.getString("email");
+                String username = rs.getString("username");
+                String city = rs.getString("city");
+                String state = rs.getString("state");
                 users.add(new User(id, first_name, last_name, email, username, city, state));
 
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return users;
     }
 
     //-- delete user
-    public boolean deleteUser(int id) throws SQLException {
+    public boolean deleteUser(int id) throws SQLException, ClassNotFoundException {
         boolean rowDeleted;
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL);) {
             statement.setInt(1, id);
